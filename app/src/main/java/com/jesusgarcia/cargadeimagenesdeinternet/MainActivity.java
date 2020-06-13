@@ -22,16 +22,10 @@ public class MainActivity extends AppCompatActivity {
 
     RecyclerViewAdaptador recyclerViewAdaptador;
     RecyclerView recyclerView;
+    String[] datoNombre, datoUrls;
 
-    public static final String TAG = "MyTag";
-
-    /**
-     * En el metodo onCreate se realizá el JsonObjectRequest que permite extraer los datos
-     * contenidos en el JSON desde la dirección URL utilizada. Los datos obtenidos del JSON son
-     * parseados para obtener los valores de los atributos que lo conforman (nombre y URL). Esos
-     * datos son enviados al método "recibir".
-     * @param savedInstanceState
-     */
+    //En el metodo onCreate se realizá el JsonObjectRequest que permite extraer los datos
+    //contenidos en el JSON desde la dirección URL utilizada.
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -40,7 +34,7 @@ public class MainActivity extends AppCompatActivity {
         /* TODO: Obtenemos los datos tipo JSON de la URL que solicitamos. Aquí se utiliza volley. */
         JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(
                 Request.Method.GET,
-                "https://simplifiedcoding.net/demos/view-flipper/heroes.php", // URL solicitada.
+                "https://simplifiedcoding.net/demos/view-flipper/heroes.php",
                 null,
                 new Response.Listener<JSONObject>() {
                     /**
@@ -53,22 +47,21 @@ public class MainActivity extends AppCompatActivity {
                             /* Obtenemos los atributos que hacen a un objeto heroes. */
                             JSONArray jsonArray = response.getJSONArray("heroes");
 
-                            datoNombre = new String[jsonArray.length()]; // Cantidad de nombres.
+                            datoNombre = new String[jsonArray.length()]; // Cantidad de nombres heros.
                             datoUrls = new String[jsonArray.length()]; // Cantidad de URLs en "heroes".
 
-                            /* Extraemos los atributos de cada "hero" existente */
+                            //Extraemos los atributos de cada heroe existente
                             for (int i = 0; i < jsonArray.length(); i++) {
-                                /* Extracción de los atributos "hero" en la posición i. */
+
                                 JSONObject hero = jsonArray.getJSONObject(i);
 
-                                String nombre = hero.getString("name"); // Extrae nombre.
-                                String imageUrl = hero.getString("imageurl"); // Extrae URL.
+                                String nombre = hero.getString("name");
+                                String imageUrl = hero.getString("imageurl");
 
-                                /* Imprime los datos extraidos en la posición i en el LOG. */
                                 Log.i("MOSTRAR", nombre + " - " + imageUrl);
 
-                                /* Envía los datos extraidos (nombre, url) de la posición i a
-                                 *  el método recibir. */
+                                //enviamos los datos extraidos en la posicion i al metodo recibir()
+                                // y jsonArray.length() es la cantidad de heroes encontrados en el json
                                 recibir(nombre, imageUrl, jsonArray.length());
                             }
                         } catch (JSONException e) {
@@ -88,17 +81,12 @@ public class MainActivity extends AppCompatActivity {
         MySingleton.getInstance(getApplicationContext()).addToRequestQueue(jsonObjectRequest);
     }
 
-    String[] datoNombre, datoUrls;
+
     int bandera = 0;
 
-    /**
-     * EL método se encarga de agregar los datos de los heroes: nombre y URL a un ArrayList
-     * que pasa al adaptador del RecyclerView.
-     * @param names Nombre extraido del heroe.
-     * @param imgUrls URL de la imagen extraido del heroe.
-     * @param limite Cantidad de heroes encontrados en el JSON.
-     */
+
     public void recibir(String names, String imgUrls, int limite) {
+        //EL método se encarga de agregar los datos de los heroes el nombre y URL a un ArrayList
         datoNombre[bandera] = names;
         datoUrls[bandera] = imgUrls;
         bandera++;
@@ -113,8 +101,8 @@ public class MainActivity extends AppCompatActivity {
                 list.add(new Card(datoUrls[i], datoNombre[i]));
             }
 
-            recyclerViewAdaptador = new RecyclerViewAdaptador(list);
-            recyclerView.setAdapter(recyclerViewAdaptador);
+            recyclerViewAdaptador = new RecyclerViewAdaptador(list);// Envia el ArrayList al adaptador.
+            recyclerView.setAdapter(recyclerViewAdaptador);// Asigna el adaptador al recyclerView.
             bandera = 0;
         }
     }

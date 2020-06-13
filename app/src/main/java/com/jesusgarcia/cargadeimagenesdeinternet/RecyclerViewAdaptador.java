@@ -40,7 +40,7 @@ public class RecyclerViewAdaptador extends RecyclerView.Adapter<RecyclerViewAdap
     @NonNull
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        /* Crea la vista de cada Card, es el inflador del RecyclerView. */
+        // Crea la vista de cada Card, es el inflador del RecyclerView.
         View view = LayoutInflater.from(parent.getContext()).inflate(
                 R.layout.card,
                 parent,
@@ -50,17 +50,13 @@ public class RecyclerViewAdaptador extends RecyclerView.Adapter<RecyclerViewAdap
         return viewHolder;
     }
 
-    /**
-     * Método encargado de asignar el texto y la imagen a cada Card que se crea.
-     * @param holder Parte del inflador que interactua con los componentes de la vista.
-     * @param position Indica la posición en que se esta creando del RecyclerView.
-     */
+    //Método encargado de asignar el texto y la imagen a cada Card que se crea.
     @Override
     public void onBindViewHolder(@NonNull final ViewHolder holder, int position) {
-        holder.textView.setText(cardList.get(position).getName()); // Asignamos el nombre al TextV.
+        // Asignamos el nombre al TextView en la posición en que se esta creando del RecyclerView.
+        holder.textView.setText(cardList.get(position).getName());
 
-        /* Asignamos la imagen al NetworkImageManager (escuchador) que cargara la imagen
-        de Internet. */
+        //Asignamos la imagen al NetworkImageManager que cargara la imagen de Internet.
         holder.networkImageView.setImageUrl(cardList.get(position).getImgUrl(), holder.imageLoader);
     }
 
